@@ -42,8 +42,7 @@ jobs:
       - name: Run preprocessing script
         run: |
           python preprocessing/automate_Faishal.py \
-            --datapath ./data \
-            --ncomps 3
+            --datapath ./data
 
       # 6. Setup GitHub auth for push
       - name: Setup GitHub auth

@@ -113,12 +113,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Automating Data Preprocessing")
     parser.add_argument("--datapath", type=str, default="../data", 
                         help="Masukkan relative path dataset", required=True)
-    parser.add_argument("--ncomps", type=int, default=3,
-                        help="Masukkan jumlah komponen LDA")
+
     args = parser.parse_args()
 
     ROOT_PATH = args.datapath
-    n_comps = args.ncomps
 
     # Load data
     df = load_data(root_path=ROOT_PATH)
@@ -139,10 +137,3 @@ if __name__ == "__main__":
 
     output_path = os.path.join(os.path.dirname(__file__), "cleaned_data.csv")
     cleaned_df.to_csv(output_path, index=False)
-
-    # Dimentional Reduction (LDA)
-    target_col = 'price_range'
-    X = cleaned_df.drop(columns=[target_col])
-    y = cleaned_df[target_col]
-
-    X_lda = lda_dim_reduction(X, y, n_comp=n_comps)
