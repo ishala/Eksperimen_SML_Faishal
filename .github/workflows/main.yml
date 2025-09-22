@@ -42,11 +42,16 @@ jobs:
             --datapath ./data \
             --ncomps 3
 
-      # 6. Save csv result to repo
+      # 6. Setup GitHub auth for push
+      - name: Setup GitHub auth
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
+
+      # 7. Save csv result to repo
       - name: Save csv result
         run: |
           git config --global user.name "${{ secrets.username }}"
           git config --global user.email "${{ secrets.email }}"
           git add preprocessing/cleaned_data.csv
-          git commit -m "Update cleaned_data.csv from CI"
-          git push origin main
+          git commit -m "Update cleaned_data.csv from CI" || echo "No changes to commit"
+          git push
