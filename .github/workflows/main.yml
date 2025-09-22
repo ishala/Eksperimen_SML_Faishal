@@ -16,15 +16,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE
+      # 1. Checkout repo
       - uses: actions/checkout@v3
 
-      # Setup Python 3.12.7
+      # 2. Setup Python 3.12.7
       - name: Set up Python 3.12.7
         uses: actions/setup-python@v4
         with:
           python-version: "3.12.7"
-      # Check ENV
+
+      # 3. Check ENV
       - name: Check Env
+        run: echo $CSV_URL
+
+      # 4. Install Libs
+      - name: Install libraries from requirements.txt
         run: |
-          echo $CSV_URL
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 5. Run preprocessing script
+      - name: Run preprocessing script
+        run: |
+          python preprocessing/automate_Faishal.py \
+            --datapath ./data \
+            --ncomps 3
+
+      # 6. Save csv result to repo
+      - name: Save csv result
+        run: |
+          git config --global user.name "${{ secrets.username }}"
+          git config --global user.email "${{ secrets.email }}"
+          git add preprocessing/cleaned_data.csv
+          git commit -m "Update cleaned_data.csv from CI"
+          git push origin main
