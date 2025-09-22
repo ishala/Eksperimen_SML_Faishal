@@ -137,12 +137,12 @@ if __name__ == "__main__":
     cleaned_df = remove_outliers_iqr(data=cleaned_df,
                                      cols=num_cols)
 
-    output_path = os.path.join(os.path.dirname(__file__), "cleaned_data.csv")
-    cleaned_df.to_csv(output_path, index=False)
-
     # Dimentional Reduction (LDA)
     target_col = 'price_range'
     X = cleaned_df.drop(columns=[target_col])
     y = cleaned_df[target_col]
 
     X_lda = lda_dim_reduction(X, y, n_comp=n_comps)
+
+    output_path = os.path.join(os.path.dirname(__file__), "cleaned_data.csv")
+    X_lda.to_csv(output_path, index=False)
