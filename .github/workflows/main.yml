@@ -1,0 +1,30 @@
+name: CI-MLFlow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  CSV_URL: "data/Mobile.csv"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE
+      - uses: actions/checkout@v3
+
+      # Setup Python 3.12.7
+      - name: Set up Python 3.12.7
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12.7"
+      # Check ENV
+      - name: Check Env
+        run: |
+          echo $CSV_URL
