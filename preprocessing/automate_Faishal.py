@@ -5,6 +5,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import numpy as np
 import argparse
+import joblib
 
 binary_cat = {'No': 0, 'Yes': 1}
 target_cat = {"Low cost": 0, "Medium cost": 1,
@@ -87,6 +88,7 @@ def standarization(scaler: StandardScaler,
                    df: pd.DataFrame,
                    ) -> pd.DataFrame:
     df[cols] = scaler.fit_transform(df[cols])
+    joblib.dump(scaler, 'standard_scaler.pkl')
     return df
 
 def remove_outliers_iqr(data: pd.DataFrame, 
@@ -101,18 +103,10 @@ def remove_outliers_iqr(data: pd.DataFrame,
         cleaned_data = cleaned_data[(cleaned_data[col] >= lower) & (cleaned_data[col] <= upper)]
     return cleaned_data
 
-def lda_dim_reduction(X: pd.Series, 
-                       y: pd.Series,
-                       n_comp: int = 3) -> pd.DataFrame:
-    lda = LinearDiscriminantAnalysis(n_components=n_comp)
-    X_lda = lda.fit_transform(X, y)
-
-    return X_lda
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Automating Data Preprocessing")
     parser.add_argument("--datapath", type=str, default="../data", 
-                        help="Masukkan relative path dataset", required=True)
+                        help="Masukkan relative path dataset")
 
     args = parser.parse_args()
 
